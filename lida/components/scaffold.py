@@ -22,11 +22,13 @@ class ChartScaffold(object):
         f"i) convert date fields to date types using data = data.with_column(pl.col(<field>).str.to_datetime(time_zone='UTC')) "
         f"ii) drop the rows with NaT values data = data.filter(pl.all_horizontal(cs.float().is_not_nan())) "
         f"iii) convert field to right time format for plotting.  ALWAYS make sure the x-axis labels are legible (e.g., rotate when needed). "
-        f"iv) Always use `list` dtype for column dtype List(String). \n"
+        f"iv) Always use `list` dtype methods for column dtype List(String). \n"
         f"v) Always use `list` dtype for column dtype List(String). \n"
-        f"iv) Always assume strings are lowercase. \n"
-        f"vi) Always remove columns which have a dtype of List(String) just before creating the chart. \n"
-        f"vii) ALWAYS return the dataframe used to create the chart along with the variable chart, i.e. data, chart. \n"
+        f"v) Always assume strings are lowercase. \n"
+        f"vii) Always remove columns which have a dtype of List(String) just before creating the chart. \n"
+        f"viii) ALWAYS return the dataframe used to create the chart along with the variable chart, i.e. data, chart. \n"
+        f"ix) ALWAYS take the top 100 rows before converting to pandas. \n"
+        f"x) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
         matplotlib_instructions = f" {general_instructions} DO NOT include plt.show(). The plot method must return a matplotlib object (plt). Think step by step. \n"
