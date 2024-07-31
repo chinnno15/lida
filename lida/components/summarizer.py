@@ -119,7 +119,7 @@ class Summarizer():
         """},
         ]
 
-        alog.info(text_gen.__dict__)
+        # alog.info(text_gen.__dict__)
 
         response = text_gen.generate(messages=messages, config=textgen_config)
         enriched_summary = base_summary
