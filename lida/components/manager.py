@@ -8,8 +8,9 @@
 import os
 from typing import List, Union
 import logging
+import alog
 
-import pandas as pd
+import polars as pl
 from llmx import llm, TextGenerator
 from lida.datamodel import Goal, Summary, TextGenerationConfig, Persona
 from lida.utils import read_dataframe
@@ -71,7 +72,7 @@ class Manager(object):
 
     def summarize(
         self,
-        data: Union[pd.DataFrame, str],
+        data: Union[pl.DataFrame, str],
         file_name="",
         n_samples: int = 3,
         summary_method: str = "default",
@@ -81,7 +82,7 @@ class Manager(object):
         Summarize data given a DataFrame or file path.
 
         Args:
-            data (Union[pd.DataFrame, str]): Input data, either a DataFrame or file path.
+            data (Union[pl.DataFrame, str]): Input data, either a DataFrame or file path.
             file_name (str, optional): Name of the file if data is loaded from a file path. Defaults to "".
             n_samples (int, optional): Number of summary samples to generate. Defaults to 3.
             summary_method (str, optional): Summary method to use. Defaults to "default".
@@ -193,6 +194,7 @@ class Manager(object):
         library="seaborn",
         return_error: bool = False,
     ):
+        
         if isinstance(goal, dict):
             goal = Goal(**goal)
         if isinstance(goal, str):
@@ -202,6 +204,7 @@ class Manager(object):
         code_specs = self.vizgen.generate(
             summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
             library=library)
+
         charts = self.execute(
             code_specs=code_specs,
             data=self.data,

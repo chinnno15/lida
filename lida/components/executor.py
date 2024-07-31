@@ -4,11 +4,14 @@ import importlib
 import io
 import os
 import re
+import sys
+
+import alog
 import traceback
 from typing import Any, List
 
 import matplotlib.pyplot as plt
-import pandas as pd
+import polars as pl
 import plotly.io as pio
 
 from lida.datamodel import ChartExecutorResponse, Summary
@@ -45,6 +48,20 @@ def preprocess_code(code: str) -> str:
     code = code.replace("```", "")
     if "chart = plot(data)" not in code:
         code = code + "\nchart = plot(data)"
+
+    # if "seaborn" in code:
+    #     if "data.to_pandas()" in code:
+    #         code = code.replace("data.to_pandas()", "data")
+
+    if "polars" in code:
+        if "groupby" in code:
+            code = code.replace("groupby", "group_by")
+
+        if ".with_column(" in code:
+            code = code.replace(".with_column(", ".with_columns(")
+        if "reverse=True" in code:
+            code = code.replace("reverse=True", "descending=True")
+
     return code
 
 
@@ -74,7 +91,7 @@ def get_globals_dict(code_string, data):
         else:
             globals_dict[module_name.split(".")[-1]] = obj
 
-    ex_dicts = {"pd": pd, "data": data, "plt": plt}
+    ex_dicts = {"pl": pl, "data": data, "plt": plt}
     globals_dict.update(ex_dicts)
     return globals_dict
 
@@ -107,6 +124,9 @@ class ChartExecutor:
         charts = []
         code_spec_copy = code_specs.copy()
         code_specs = [preprocess_code(code) for code in code_specs]
+
+        alog.info(code_specs)
+
         if library == "altair":
             for code in code_specs:
                 try:
@@ -150,11 +170,15 @@ class ChartExecutor:
         elif library == "matplotlib" or library == "seaborn":
             # print colum dtypes
             for code in code_specs:
+                # import alog
+                # alog.info(code)
+
                 try:
                     ex_locals = get_globals_dict(code, data)
-                    # print(ex_locals)
                     exec(code, ex_locals)
-                    chart = ex_locals["chart"]
+
+                    chart, df = ex_locals["chart"]
+
                     if plt:
                         buf = io.BytesIO()
                         plt.box(False)
@@ -172,6 +196,7 @@ class ChartExecutor:
                         plt.close()
                     charts.append(
                         ChartExecutorResponse(
+                            df=df,
                             spec=None,
                             status=True,
                             raster=plot_data,
@@ -180,8 +205,18 @@ class ChartExecutor:
                         )
                     )
                 except Exception as exception_error:
-                    print(code_spec_copy[0])
-                    print("****\n", str(exception_error))
+                    # alog.info(exception_error)
+
+                    traceback.print_exception(Exception,
+                                              exception_error,
+                                              tb=None,
+                                              limit=None,
+                                              file=sys.stderr)
+
+                    alog.info(code_specs[0])
+
+                    alog.info(("****\n", str(exception_error)))
+
                     # print(traceback.format_exc())
                     if return_error:
                         charts.append(
