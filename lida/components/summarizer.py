@@ -1,11 +1,12 @@
 import json
 import logging
 from typing import Union
-import pandas as pd
+import polars as pl
 from lida.utils import clean_code_snippet, read_dataframe
 from lida.datamodel import TextGenerationConfig
 from llmx import TextGenerator
 import warnings
+import alog
 
 system_prompt = """
 You are an experienced data analyst that can annotate datasets. Your instructions are as follows:
@@ -31,9 +32,10 @@ class Summarizer():
         else:
             return value
 
-    def get_column_properties(self, df: pd.DataFrame, n_samples: int = 3) -> list[dict]:
+    def get_column_properties(self, df: pl.DataFrame, n_samples: int = 3) -> list[dict]:
         """Get properties of each column in a pandas DataFrame"""
         properties_list = []
+
         for column in df.columns:
             dtype = df[column].dtype
             properties = {}
@@ -50,17 +52,23 @@ class Summarizer():
                 try:
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore")
-                        pd.to_datetime(df[column], errors='raise')
+                        # pl.col(column)
+                        # pl.--(df[column], errors='raise')
+                        df.with_columns(
+                            pl.col(column).str.to_datetime("%d %B %Y")
+                        )
                         properties["dtype"] = "date"
                 except ValueError:
                     # Check if the string column has a limited number of values
-                    if df[column].nunique() / len(df[column]) < 0.5:
+                    if df[column].n_unique() / len(df[column]) < 0.5:
                         properties["dtype"] = "category"
                     else:
                         properties["dtype"] = "string"
-            elif pd.api.types.is_categorical_dtype(df[column]):
+            elif isinstance(dtype, pl.Categorical):
+            #     pass
+            # elif pl.api.types.is_categorical_dtype(df[column]):
                 properties["dtype"] = "category"
-            elif pd.api.types.is_datetime64_any_dtype(df[column]):
+            elif isinstance(dtype, pl.Datetime):
                 properties["dtype"] = "date"
             else:
                 properties["dtype"] = str(dtype)
@@ -71,18 +79,26 @@ class Summarizer():
                     properties["min"] = df[column].min()
                     properties["max"] = df[column].max()
                 except TypeError:
-                    cast_date_col = pd.to_datetime(df[column], errors='coerce')
+                    cast_date_col = pl.to_datetime(df[column], errors='coerce')
                     properties["min"] = cast_date_col.min()
                     properties["max"] = cast_date_col.max()
             # Add additional properties to the output dictionary
-            nunique = df[column].nunique()
             if "samples" not in properties:
-                non_null_values = df[column][df[column].notnull()].unique()
+                non_null_values = df.select(pl.col(column).filter(pl.col(column).is_not_null())).unique()
+                # non_null_values = df[column][df[column].is_not_null()].unique()
                 n_samples = min(n_samples, len(non_null_values))
-                samples = pd.Series(non_null_values).sample(
-                    n_samples, random_state=42).tolist()
+                samples = pl.Series(non_null_values).sample(
+                    n_samples,
+                    # random_state=42
+                ).to_list()
                 properties["samples"] = samples
-            properties["num_unique_values"] = nunique
+
+            try:
+                nunique = df[column].n_unique()
+                properties["num_unique_values"] = nunique
+            except:
+                pass
+
             properties["semantic_type"] = ""
             properties["description"] = ""
             properties_list.append(
@@ -103,6 +119,8 @@ class Summarizer():
         """},
         ]
 
+        alog.info(text_gen.__dict__)
+
         response = text_gen.generate(messages=messages, config=textgen_config)
         enriched_summary = base_summary
         try:
@@ -112,15 +130,17 @@ class Summarizer():
             error_msg = f"The model did not return a valid JSON object while attempting to generate an enriched data summary. Consider using a default summary or  a larger model with higher max token length. | {response.text[0]['content']}"
             logger.info(error_msg)
             print(response.text[0]["content"])
-            raise ValueError(error_msg + "" + response.usage)
+            raise ValueError(error_msg + "" + json.dumps(response.usage))
         return enriched_summary
 
     def summarize(
-            self, data: Union[pd.DataFrame, str],
+            self, data: Union[pl.DataFrame, str],
             text_gen: TextGenerator, file_name="", n_samples: int = 3,
             textgen_config=TextGenerationConfig(n=1),
             summary_method: str = "default", encoding: str = 'utf-8') -> dict:
         """Summarize data from a pandas DataFrame or a file location"""
+
+        # alog.info(alog.pformat(locals()))
 
         # if data is a file path, read it into a pandas DataFrame, set file_name to the file name
         if isinstance(data, str):
@@ -153,7 +173,8 @@ class Summarizer():
                 "dataset_description": ""
             }
 
-        data_summary["field_names"] = data.columns.tolist()
+        data_summary["field_names"] = data.columns
+
         data_summary["file_name"] = file_name
 
         return data_summary

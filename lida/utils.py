@@ -5,7 +5,7 @@ from typing import Any, List, Tuple, Union
 import os
 import io
 import numpy as np
-import pandas as pd
+import polars as pl
 import re
 import matplotlib.pyplot as plt
 import tiktoken
@@ -30,19 +30,21 @@ def clean_column_name(col_name: str) -> str:
     return re.sub(r'[^0-9a-zA-Z_]', '_', col_name)
 
 
-def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
+def clean_column_names(df: pl.DataFrame) -> pl.DataFrame:
     """
     Clean all column names in the given DataFrame.
 
     :param df: The DataFrame with possibly dirty column names.
     :return: A copy of the DataFrame with clean column names.
     """
-    cleaned_df = df.copy()
+    # cleaned_df = df.copy()
+    cleaned_df = df.clone()
+
     cleaned_df.columns = [clean_column_name(col) for col in cleaned_df.columns]
     return cleaned_df
 
 
-def read_dataframe(file_location: str, encoding: str = 'utf-8') -> pd.DataFrame:
+def read_dataframe(file_location: str, encoding: str = 'utf-8') -> pl.DataFrame:
     """
     Read a dataframe from a given file location and clean its column names.
     It also samples down to 4500 rows if the data exceeds that limit.
@@ -54,13 +56,14 @@ def read_dataframe(file_location: str, encoding: str = 'utf-8') -> pd.DataFrame:
     file_extension = file_location.split('.')[-1]
 
     read_funcs = {
-        'json': lambda: pd.read_json(file_location, orient='records', encoding=encoding),
-        'csv': lambda: pd.read_csv(file_location, encoding=encoding),
-        'xls': lambda: pd.read_excel(file_location, encoding=encoding),
-        'xlsx': lambda: pd.read_excel(file_location, encoding=encoding),
-        'parquet': pd.read_parquet,
-        'feather': pd.read_feather,
-        'tsv': lambda: pd.read_csv(file_location, sep="\t", encoding=encoding)
+        'json': lambda: pl.read_json(file_location, orient='records', encoding=encoding),
+        'csv': lambda: pl.read_csv(file_location, encoding=encoding),
+        'xls': lambda: pl.read_excel(file_location, encoding=encoding),
+        'xlsx': lambda: pl.read_excel(file_location, encoding=encoding),
+        'parquet': pl.read_parquet,
+        # disable for polars
+        # 'feather': pl.read_feather,
+        'tsv': lambda: pl.read_csv(file_location, sep="\t", encoding=encoding)
     }
 
     if file_extension not in read_funcs:
@@ -81,25 +84,25 @@ def read_dataframe(file_location: str, encoding: str = 'utf-8') -> pd.DataFrame:
             "Dataframe has more than 4500 rows. We will sample 4500 rows.")
         cleaned_df = cleaned_df.sample(4500)
 
-    if cleaned_df.columns.tolist() != df.columns.tolist():
-        write_funcs = {
-            'csv': lambda: cleaned_df.to_csv(file_location, index=False, encoding=encoding),
-            'xls': lambda: cleaned_df.to_excel(file_location, index=False),
-            'xlsx': lambda: cleaned_df.to_excel(file_location, index=False),
-            'parquet': lambda: cleaned_df.to_parquet(file_location, index=False),
-            'feather': lambda: cleaned_df.to_feather(file_location, index=False),
-            'json': lambda: cleaned_df.to_json(file_location, orient='records', index=False, default_handler=str),
-            'tsv': lambda: cleaned_df.to_csv(file_location, index=False, sep='\t', encoding=encoding)
-        }
-
-        if file_extension not in write_funcs:
-            raise ValueError('Unsupported file type')
-
-        try:
-            write_funcs[file_extension]()
-        except Exception as e:
-            logger.error(f"Failed to write file: {file_location}. Error: {e}")
-            raise
+    # if cleaned_df.columns.tolist() != df.columns.tolist():
+    #     write_funcs = {
+    #         'csv': lambda: cleaned_df.to_csv(file_location, index=False, encoding=encoding),
+    #         'xls': lambda: cleaned_df.to_excel(file_location, index=False),
+    #         'xlsx': lambda: cleaned_df.to_excel(file_location, index=False),
+    #         'parquet': lambda: cleaned_df.to_parquet(file_location, index=False),
+    #         'feather': lambda: cleaned_df.to_feather(file_location, index=False),
+    #         'json': lambda: cleaned_df.to_json(file_location, orient='records', index=False, default_handler=str),
+    #         'tsv': lambda: cleaned_df.to_csv(file_location, index=False, sep='\t', encoding=encoding)
+    #     }
+    #
+    #     if file_extension not in write_funcs:
+    #         raise ValueError('Unsupported file type')
+    #
+    #     try:
+    #         write_funcs[file_extension]()
+    #     except Exception as e:
+    #         logger.error(f"Failed to write file: {file_location}. Error: {e}")
+    #         raise
 
     return cleaned_df
 
@@ -109,15 +112,15 @@ def file_to_df(file_location: str):
     file_name = file_location.split("/")[-1]
     df = None
     if "csv" in file_name:
-        df = pd.read_csv(file_location)
+        df = pl.read_csv(file_location)
     elif "xlsx" in file_name:
-        df = pd.read_excel(file_location)
+        df = pl.read_excel(file_location)
     elif "json" in file_name:
-        df = pd.read_json(file_location, orient="records")
+        df = pl.read_json(file_location, orient="records")
     elif "parquet" in file_name:
-        df = pd.read_parquet(file_location)
+        df = pl.read_parquet(file_location)
     elif "feather" in file_name:
-        df = pd.read_feather(file_location)
+        df = pl.read_feather(file_location)
 
     return df
 

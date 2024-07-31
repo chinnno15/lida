@@ -4,6 +4,7 @@ from llmx import TextGenerator, TextGenerationConfig, TextGenerationResponse
 
 from ..scaffold import ChartScaffold
 from lida.datamodel import Goal
+import alog
 
 
 system_prompt = """

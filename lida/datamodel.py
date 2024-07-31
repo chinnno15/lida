@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from llmx import TextGenerationConfig
 from pydantic.dataclasses import dataclass
+import pandas as pd
 
 
 @dataclass
@@ -194,6 +195,7 @@ class ChartExecutorResponse:
     raster: Optional[str]  # base64 encoded image
     code: str  # code used to generate the visualization
     library: str  # library used to generate the visualization
+    df: Optional[Any] = None
     error: Optional[Dict] = None  # error message if status is False
 
     def _repr_mimebundle_(self, include=None, exclude=None):

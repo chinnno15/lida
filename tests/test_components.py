@@ -1,7 +1,9 @@
 from lida.components import Manager
 from llmx import llm, TextGenerationConfig
 import os
-lida = Manager(text_gen=llm("openai"))
+import alog
+
+lida = Manager(text_gen=llm("openai", model="gpt-4o"))
 
 
 cars_data_url = "https://raw.githubusercontent.com/uwdata/draco/master/data/cars.csv"
@@ -18,6 +20,9 @@ def test_summarizer():
                                     textgen_config=textgen_config, summary_method="llm")
 
     assert summary_no_enrich != summary_enrich
+
+    # alog.info(alog.pformat(summary_enrich))
+
     assert "dataset_description" in summary_enrich and len(
         summary_enrich["dataset_description"]) > 0
 
@@ -39,10 +44,11 @@ def test_vizgen():
         n=1,
         temperature=0.1,
         use_cache=True,
+        model="gpt-4o",
         max_tokens=None)
     summary = lida.summarize(
         cars_data_url,
-        textgen_config=textgen_config, summary_method="default")
+        textgen_config=textgen_config, summary_method="llm", )
 
     goals = lida.goals(summary, n=2, textgen_config=textgen_config)
     charts = lida.visualize(
@@ -51,7 +57,10 @@ def test_vizgen():
         textgen_config=textgen_config,
         library="seaborn")
 
+    # alog.info(charts)
+
     assert len(charts) > 0
+
     first_chart = charts[0]
 
     # Ensure the first chart has a status of True
