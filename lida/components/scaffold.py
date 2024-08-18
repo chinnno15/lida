@@ -27,10 +27,11 @@ class ChartScaffold(object):
         f"*) Always assume strings are lowercase. \n"
         f"*) Always remove columns which have a dtype of List(String) just before creating the chart. \n"
         f"*) ALWAYS '&' operator when combining multiple keyword based conditions.\n"
-        f"*) ALWAYS return 'url' column in final dataframe if it exists.\n"
-        f"*) ALWAYS return the dataframe used to create the chart along with the variable chart, i.e. data, chart. \n"
-        f"*) ALWAYS take the top 20 rows before converting to pandas. \n"
+        f"*) ALWAYS use `head()` to return ONLY twenty (20) rows before converting from Polars to Pandas. \n"
         f"*) NEVER plot more than 20 rows. \n"
+        f"*) ALWAYS return 'url' column in final dataframe if it exists.\n"
+        f"`is_not_nan` operation not supported for dtype `str` \n"
+        f"*) ALWAYS return the dataframe used to create the chart along with the variable chart, i.e. data, chart. \n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
