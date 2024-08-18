@@ -30,6 +30,7 @@ class ChartScaffold(object):
         f"*) ALWAYS return 'url' column in final dataframe if it exists.\n"
         f"*) ALWAYS return the dataframe used to create the chart along with the variable chart, i.e. data, chart. \n"
         f"*) ALWAYS take the top 20 rows before converting to pandas. \n"
+        f"*) NEVER plot more than 20 rows. \n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
