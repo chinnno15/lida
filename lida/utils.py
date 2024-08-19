@@ -205,12 +205,12 @@ def cache_request(cache: Cache, params: Any, values: Any = None) -> Any:
         params, sort_keys=True).encode("utf-8")).hexdigest()
     # Check if the request is cached
     if key in cache and values is None:
-        print("retrieving from cache")
+        alog.info("retrieving from cache")
         return cache[key]
 
     # Cache the provided values and return them
     if values:
-        print("saving to cache")
+        alog.info("saving to cache")
         cache[key] = values
     return values
 

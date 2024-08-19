@@ -43,7 +43,7 @@ class VizEvaluator(object):
              "content": f"Generate an evaluation given the goal and code below in {library}. The specified goal is \n\n {goal.question} \n\n and the visualization code is \n\n {code} \n\n. Now, evaluate the code based on the 6 dimensions above. \n. THE SCORE YOU ASSIGN MUST BE MEANINGFUL AND BACKED BY CLEAR RATIONALE. A SCORE OF 1 IS POOR AND A SCORE OF 10 IS VERY GOOD. The structured evaluation is below ."},
         ]
 
-        # print(messages)
+        # alog.info(messages)
         completions: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
 
@@ -54,5 +54,5 @@ class VizEvaluator(object):
                 evaluation = json.loads(completion)
                 evaluations.append(evaluation)
             except Exception as json_error:
-                print("Error parsing evaluation data", completion, str(json_error))
+                alog.info("Error parsing evaluation data", completion, str(json_error))
         return evaluations

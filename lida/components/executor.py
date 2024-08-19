@@ -1,20 +1,18 @@
+from lida.datamodel import ChartExecutorResponse, Summary
+from typing import Any, List
+
+import alog
 import ast
 import base64
 import importlib
 import io
+import matplotlib.pyplot as plt
 import os
+import plotly.io as pio
+import polars as pl
 import re
 import sys
-
-import alog
 import traceback
-from typing import Any, List
-
-import matplotlib.pyplot as plt
-import polars as pl
-import plotly.io as pio
-
-from lida.datamodel import ChartExecutorResponse, Summary
 
 
 def preprocess_code(code: str) -> str:
@@ -26,7 +24,7 @@ def preprocess_code(code: str) -> str:
 
     # remove all text after chart = plot(data)
     if "chart = plot(data)" in code:
-        # print(code)
+        # alog.info(code)
         index = code.find("chart = plot(data)")
         if index != -1:
             code = code[: index + len("chart = plot(data)")]
@@ -149,9 +147,9 @@ class ChartExecutor:
                         )
                     )
                 except Exception as exception_error:
-                    print(code_spec_copy, "\n===========\n")
-                    print(exception_error)
-                    print(traceback.format_exc())
+                    alog.info(code_spec_copy, "\n===========\n")
+                    alog.info(exception_error)
+                    alog.info(traceback.format_exc())
                     if return_error:
                         charts.append(
                             ChartExecutorResponse(
@@ -187,7 +185,7 @@ class ChartExecutor:
                         #     plt.draw()
                         #     # plt.tight_layout()
                         # except AttributeError:
-                        #     print("Warning: tight_layout encountered an error. The layout may not be optimal.")
+                        #     alog.info("Warning: tight_layout encountered an error. The layout may not be optimal.")
                         #     pass
 
                         plt.savefig(buf, format="png", dpi=100, pad_inches=0.2)
@@ -217,7 +215,7 @@ class ChartExecutor:
 
                     alog.info(("****\n", str(exception_error)))
 
-                    # print(traceback.format_exc())
+                    # alog.info(traceback.format_exc())
                     if return_error:
                         charts.append(
                             ChartExecutorResponse(
@@ -254,8 +252,8 @@ class ChartExecutor:
                         )
                     )
                 except Exception as exception_error:
-                    print(code)
-                    print(traceback.format_exc())
+                    alog.info(code)
+                    alog.info(traceback.format_exc())
                     if return_error:
                         charts.append(
                             ChartExecutorResponse(
@@ -293,8 +291,8 @@ class ChartExecutor:
                             )
                         )
                 except Exception as exception_error:
-                    print(code)
-                    print(traceback.format_exc())
+                    alog.info(code)
+                    alog.info(traceback.format_exc())
                     if return_error:
                         charts.append(
                             ChartExecutorResponse(

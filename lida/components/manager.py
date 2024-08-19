@@ -225,7 +225,7 @@ class Manager(object):
 
         if data is None:
             root_file_path = os.path.dirname(os.path.abspath(lida.__file__))
-            print(root_file_path)
+            alog.info(root_file_path)
             data = read_dataframe(
                 os.path.join(root_file_path, "files/data", summary.file_name)
             )

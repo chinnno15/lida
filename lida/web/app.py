@@ -52,13 +52,13 @@ api.mount("/files", StaticFiles(directory=files_static_root, html=True), name="f
 async def visualize_data(req: VisualizeWebRequest) -> dict:
     """Generate goals given a dataset summary"""
     try:
-        # print(req.textgen_config)
+        # alog.info(req.textgen_config)
         charts = lida.visualize(
             summary=req.summary,
             goal=req.goal,
             textgen_config=req.textgen_config if req.textgen_config else TextGenerationConfig(),
             library=req.library, return_error=True)
-        print("found charts: ", len(charts), " for goal: ")
+        alog.info("found charts: ", len(charts), " for goal: ")
         if len(charts) == 0:
             return {"status": False, "message": "No charts generated"}
         return {"status": True, "charts": charts,
@@ -90,7 +90,7 @@ async def edit_visualization(req: VisualizeEditWebRequest) -> dict:
 
     except Exception as exception_error:
         logger.error(f"Error generating visualization edits: {str(exception_error)}")
-        print(traceback.print_exc())
+        alog.info(traceback.print_exc())
         return {"status": False,
                 "message": f"Error generating visualization edits."}
 
@@ -230,7 +230,7 @@ async def upload_file(file: UploadFile):
     # allow csv, excel, json
     allowed_types = ["text/csv", "application/vnd.ms-excel", "application/json"]
 
-    # print("file: ", file)
+    # alog.info("file: ", file)
     # check file type
     if file.content_type not in allowed_types:
         return {"status": False,

@@ -56,5 +56,5 @@ class VizExplainer(object):
                 exp = json.loads(completion)
                 explanations.append(exp)
             except Exception as e:
-                print("Error parsing completion", completion, str(e))
+                alog.info("Error parsing completion", completion, str(e))
         return explanations

@@ -32,11 +32,11 @@ def ui(host: str = "127.0.0.1",
 
 @app.command()
 def models():
-    print("A list of supported providers:")
+    alog.info("A list of supported providers:")
     for provider in providers.items():
-        print(f"Provider: {provider[1]['name']}")
+        alog.info(f"Provider: {provider[1]['name']}")
         for model in provider[1]["models"]:
-            print(f"  - {model['name']}")
+            alog.info(f"  - {model['name']}")
 
 
 def run():

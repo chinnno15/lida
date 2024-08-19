@@ -30,7 +30,7 @@ class VizEditor(object):
             question="",
             visualization="",
             rationale=""), library)
-        # print("instructions", instructions)
+        # alog.info("instructions", instructions)
 
         messages = [
             {
