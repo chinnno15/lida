@@ -28,6 +28,7 @@ class ChartScaffold(object):
         f"*) Always remove columns which have a dtype of List(String) just before creating the chart. \n"
         f"*) ALWAYS '&' operator when combining multiple keyword based conditions.\n"
         f"*) ALWAYS use `head()` to return ONLY twenty (20) rows before converting from Polars to Pandas. \n"
+        f"*) AGAIN ALWAYS use `head()` to return ONLY twenty (20) rows before converting from Polars to Pandas. \n"
         f"*) NEVER plot more than 20 rows. \n"
         f"*) ALWAYS return 'url' column in final dataframe if it exists.\n"
         f"`is_not_nan` operation not supported for dtype `str` \n"
