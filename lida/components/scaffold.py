@@ -19,8 +19,8 @@ class ChartScaffold(object):
     def get_template(self, goal: Goal, library: str):
 
         general_instructions = (f"If the solution requires a single value (e.g. max, min, median, first, last etc), ALWAYS add a line (axvline or axhline) to the chart, ALWAYS with a legend containing the single value (formatted with 0.2F). If using a <field> where semantic_type=date, YOU MUST APPLY the following transform before using that column "
-        f"*) convert date fields to date types using data = data.with_column(pl.col(<field>).str.to_datetime(time_zone='UTC')) "
-        f"*) drop the rows with NaT values data = data.filter(pl.all_horizontal(cs.float().is_not_nan())) "
+        f"*) convert date fields to date types using data = data.with_column(pl.col(<field>).str.to_datetime(time_zone='UTC')) ONLY if they are not already date types. "
+        # f"*) drop the rows with NaT values data = data.filter(pl.all_horizontal(cs.float().is_not_nan())) "
         f"*) convert field to right time format for plotting.  ALWAYS make sure the x-axis labels are legible (e.g., rotate when needed). "
         f"*) Always use `list` dtype methods for column dtype List(String) not `array` methods. \n"
         f"*) Always use `list` dtype for column dtype List(String). \n"
@@ -34,8 +34,12 @@ class ChartScaffold(object):
         f"*) AGAIN ALWAYS use `head()` to return ONLY twenty (20) rows before converting from Polars to Pandas. \n"
         f"*) NEVER plot more than 20 rows. \n"
         f"*) Make sure to ALWAYS return 'url' column in final dataframe if it exists.\n"
+        f"*) Filter nan values on numeric such as price or aggregations on price ONLY. \n"
+        f"*) Filter null values on a separate line on the numeric columns such as price or aggregations on price ONLY. \n"
+        f"*) ALWAYS sort the dataframe by the relevant column before creating the chart. \n"
         f"*) ALWAYS return the dataframe (df_pandas) used to create the chart along with the variable chart, i.e. data, chart. \n"
-        f"*) ALWAYS return a list of columns relevant to the query in variable 'cols'.\n"
+        f"*) When formatting strings be sure to do so after applying all transformations on a separate line. \n"
+        f"*) ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations.\n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
@@ -62,7 +66,6 @@ chart = plot(data) # data already contains the data to be plotted. Always includ
             instructions = {
                 "role": "assistant",
                 "content": f"{matplotlib_instructions}. Use BaseMap for charts that require a map. "}
-
             template = \
                 f"""
 import seaborn as sns
@@ -71,11 +74,15 @@ import matplotlib.pyplot as plt
 <imports>
 # solution plan
 # i.  ..
+
 def plot(data: pl.DataFrame):
 
     <stub> # only modify this section
     plt.title('{goal.question}', wrap=True)
-    return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as a list of relevant columns `cols`. Return plt first.
+    return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as dictionary `cols`.
+    ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations, ignore columns like 'url'.
+    Make sure to ALWAYS return 'url' column in final dataframe if it exists in list of columns.
+     Return plt first.
 
 chart = plot(data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""
 

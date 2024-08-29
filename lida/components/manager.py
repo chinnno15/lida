@@ -201,6 +201,7 @@ class Manager(object):
             goal = Goal(question=goal, visualization=goal, rationale="")
 
         self.check_textgen(config=textgen_config)
+
         code_specs = self.vizgen.generate(
             summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
             library=library)

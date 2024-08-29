@@ -123,7 +123,8 @@ class ChartExecutor:
         code_spec_copy = code_specs.copy()
         code_specs = [preprocess_code(code) for code in code_specs]
 
-        alog.info(code_specs)
+        alog.info('### print code_specs ###')
+        alog.info(''.join(code_specs))
 
         if library == "altair":
             for code in code_specs:

@@ -43,7 +43,7 @@ def test_vizgen():
     textgen_config = TextGenerationConfig(
         n=1,
         temperature=0.1,
-        use_cache=True,
+        use_cache=False,
         model="gpt-4o",
         max_tokens=None)
     summary = lida.summarize(
