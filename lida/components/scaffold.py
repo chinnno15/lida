@@ -35,6 +35,7 @@ class ChartScaffold(object):
         f"*) NEVER plot more than 20 rows. \n"
         f"*) Make sure to ALWAYS return 'url' column in final dataframe if it exists.\n"
         f"*) ALWAYS return the dataframe (df_pandas) used to create the chart along with the variable chart, i.e. data, chart. \n"
+        f"*) ALWAYS return a list of columns relevant to the query in variable 'cols'.\n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
@@ -74,7 +75,7 @@ def plot(data: pl.DataFrame):
 
     <stub> # only modify this section
     plt.title('{goal.question}', wrap=True)
-    return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`. Return plt first.
+    return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as a list of relevant columns `cols`. Return plt first.
 
 chart = plot(data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""
 

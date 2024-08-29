@@ -175,7 +175,7 @@ class ChartExecutor:
                     ex_locals = get_globals_dict(code, data)
                     exec(code, ex_locals)
 
-                    chart, df = ex_locals["chart"]
+                    chart, df, cols = ex_locals["chart"]
 
                     if plt:
                         buf = io.BytesIO()
@@ -195,6 +195,7 @@ class ChartExecutor:
                     charts.append(
                         ChartExecutorResponse(
                             df=df,
+                            cols=cols,
                             spec=None,
                             status=True,
                             raster=plot_data,
