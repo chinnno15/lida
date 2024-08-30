@@ -2,7 +2,8 @@ from typing import Dict, List, Union
 from llmx import TextGenerator, TextGenerationConfig, TextGenerationResponse
 
 from ..scaffold import ChartScaffold
-from lida.datamodel import Goal, Summary
+from lida.datamodel.__init__ import Summary
+from lida.components.goal.goal import Goal
 
 system_prompt = """
 You are a helpful assistant highly skilled in revising visualization code to improve the quality of the code and visualization based on feedback.  Assume that data in plot(data) contains a valid dataframe.

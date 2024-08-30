@@ -1,4 +1,3 @@
-import json
 import os
 import logging
 import requests
@@ -8,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import traceback
 
 from llmx import llm, providers
-from ..datamodel import GoalWebRequest, SummaryUrlRequest, TextGenerationConfig, UploadUrl, VisualizeEditWebRequest, VisualizeEvalWebRequest, VisualizeExplainWebRequest, VisualizeRecommendRequest, VisualizeRepairWebRequest, VisualizeWebRequest, InfographicsRequest
+from lida.datamodel.__init__ import GoalWebRequest, SummaryUrlRequest, TextGenerationConfig, VisualizeEditWebRequest, VisualizeEvalWebRequest, VisualizeExplainWebRequest, VisualizeRecommendRequest, VisualizeRepairWebRequest, VisualizeWebRequest, InfographicsRequest
 from ..components import Manager
 
 

@@ -12,10 +12,12 @@ import alog
 
 import polars as pl
 from llmx import llm, TextGenerator
-from lida.datamodel import Goal, Summary, TextGenerationConfig, Persona
+from lida.datamodel.__init__ import Summary, TextGenerationConfig
+from ..datamodel.persona import Persona
+from lida.components.goal.goal import Goal
 from lida.utils import read_dataframe
 from ..components.summarizer import Summarizer
-from ..components.goal import GoalExplorer
+from lida.components.goal.goal_explorer import GoalExplorer
 from ..components.persona import PersonaExplorer
 from ..components.executor import ChartExecutor
 from ..components.viz import VizGenerator, VizEditor, VizExplainer, VizEvaluator, VizRepairer, VizRecommender

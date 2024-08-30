@@ -1,11 +1,10 @@
 import logging
-import json
 from lida.utils import clean_code_snippet
 from ..scaffold import ChartScaffold
 from llmx import TextGenerator, TextGenerationConfig, TextGenerationResponse
 # from lida.modules.scaffold import ChartScaffold
-from lida.datamodel import Goal, Summary
-
+from lida.datamodel.__init__ import Summary
+from lida.components.goal.goal import Goal
 
 system_prompt = """
 

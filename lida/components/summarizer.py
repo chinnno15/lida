@@ -3,7 +3,7 @@ import logging
 from typing import Union
 import polars as pl
 from lida.utils import clean_code_snippet, read_dataframe
-from lida.datamodel import TextGenerationConfig
+from lida.datamodel.__init__ import TextGenerationConfig
 from llmx import TextGenerator
 import warnings
 import alog

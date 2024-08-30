@@ -1,11 +1,10 @@
 # from dataclasses import dataclass
-import base64
 from dataclasses import field
-from typing import Any, Dict, List, Optional, Union
-
-from llmx import TextGenerationConfig
+from llmx.datamodel import TextGenerationConfig
 from pydantic.dataclasses import dataclass
-import pandas as pd
+from typing import Any, Dict, List, Optional, Union
+import base64
+from lida.components.goal.goal import Goal
 
 
 @dataclass
@@ -33,23 +32,8 @@ class UploadUrl:
 
 
 @dataclass
-class Goal:
-    """A visualization goal"""
-    question: str
-    visualization: str
-    rationale: str
-    index: Optional[int] = 0
-
-    def _repr_markdown_(self):
-        return f"""
-### Goal {self.index}
----
-**Question:** {self.question}
-
-**Visualization:** `{self.visualization}`
-
-**Rationale:** {self.rationale}
-"""
+class TextGenerator:
+    pass
 
 
 @dataclass
@@ -64,7 +48,7 @@ class Summary:
 
     def _repr_markdown_(self):
         field_lines = "\n".join([f"- **{name}:** {field}" for name,
-                                field in zip(self.field_names, self.fields)])
+        field in zip(self.field_names, self.fields)])
         return f"""
 ## Dataset Summary
 
@@ -81,23 +65,6 @@ class Summary:
 **Fields:**
 
 {field_lines}
-"""
-
-
-@dataclass
-class Persona:
-    """A persona"""
-    persona: str
-    rationale: str
-
-    def _repr_markdown_(self):
-        return f"""
-### Persona
----
-
-**Persona:** {self.persona}
-
-**Rationale:** {self.rationale}
 """
 
 

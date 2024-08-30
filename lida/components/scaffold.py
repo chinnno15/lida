@@ -1,6 +1,4 @@
-from dataclasses import asdict
-
-from lida.datamodel import Goal
+from lida.components.goal.goal import Goal
 
 
 # if len(plt.xticks()[0])) > 20 assuming plot is made with plt or
@@ -35,7 +33,8 @@ class ChartScaffold(object):
         f"*) NEVER plot more than 20 rows. \n"
         f"*) Make sure to ALWAYS return 'url' column in final dataframe if it exists.\n"
         f"*) Filter nan values on numeric such as price or aggregations on price ONLY. \n"
-        f"*) Filter null values on a separate line on the numeric columns such as price or aggregations on price ONLY. \n"
+        f"*) Filter null values on a separate line on the numeric columns such as price or aggregations on price ONLY. \n" 
+        f"*) ALWAYS Filter nan and null values relevant columns on before aggregating. \n"                 
         f"*) ALWAYS sort the dataframe by the relevant column before creating the chart. \n"
         f"*) ALWAYS return the dataframe (df_pandas) used to create the chart along with the variable chart, i.e. data, chart. \n"
         f"*) When formatting strings be sure to do so after applying all transformations on a separate line. \n"

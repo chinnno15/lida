@@ -1,4 +1,4 @@
-from lida.datamodel import ChartExecutorResponse, Summary
+from lida.datamodel.__init__ import ChartExecutorResponse, Summary
 from typing import Any, List
 
 import alog
@@ -7,7 +7,6 @@ import base64
 import importlib
 import io
 import matplotlib.pyplot as plt
-import os
 import plotly.io as pio
 import polars as pl
 import re

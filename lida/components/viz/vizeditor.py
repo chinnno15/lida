@@ -1,7 +1,7 @@
 from llmx import TextGenerator, TextGenerationConfig, TextGenerationResponse
 from ..scaffold import ChartScaffold
-from lida.datamodel import Goal, Summary
-
+from lida.datamodel.__init__ import Summary
+from lida.components.goal.goal import Goal
 
 system_prompt = """
 You are a high skilled visualization assistant that can modify a provided visualization code based on a set of instructions. You MUST return a full program. DO NOT include any preamble text. Do not include explanations or prose.
