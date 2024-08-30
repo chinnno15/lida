@@ -1,4 +1,5 @@
-from lida.datamodel.__init__ import ChartExecutorResponse, Summary
+from lida.datamodel.__init__ import ChartExecutorResponse
+from lida.datamodel import Summary
 from typing import Any, List
 
 import alog

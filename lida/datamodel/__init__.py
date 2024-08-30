@@ -5,6 +5,7 @@ from pydantic.dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 import base64
 from lida.components.goal.goal import Goal
+from lida.datamodel.summary import Summary
 
 
 @dataclass
@@ -29,38 +30,6 @@ class UploadUrl:
     """Response from a text generation"""
 
     url: str
-
-
-@dataclass
-class Summary:
-    """A summary of a dataset"""
-
-    name: str
-    file_name: str
-    dataset_description: str
-    field_names: List[Any]
-    fields: Optional[List[Any]] = None
-
-    def _repr_markdown_(self):
-        field_lines = "\n".join([f"- **{name}:** {field}" for name,
-        field in zip(self.field_names, self.fields)])
-        return f"""
-## Dataset Summary
-
----
-
-**Name:** {self.name}
-
-**File Name:** {self.file_name}
-
-**Dataset Description:**
-
-{self.dataset_description}
-
-**Fields:**
-
-{field_lines}
-"""
 
 
 @dataclass

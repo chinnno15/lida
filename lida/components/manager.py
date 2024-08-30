@@ -12,7 +12,8 @@ import alog
 
 import polars as pl
 from llmx import llm, TextGenerator
-from lida.datamodel.__init__ import Summary, TextGenerationConfig
+from lida.datamodel.__init__ import TextGenerationConfig
+from ..datamodel import Summary
 from ..datamodel.persona import Persona
 from lida.components.goal.goal import Goal
 from lida.utils import read_dataframe
@@ -128,7 +129,11 @@ class Manager(object):
 
         if isinstance(data, str):
             file_name = data.split("/")[-1]
-            data = read_dataframe(data)
+
+            if '.parquet' in file_name:
+                data = pl.read_parquet(data)
+            else:
+                data = read_dataframe(data)
 
         self.data = data
         return self.summarizer.summarize(

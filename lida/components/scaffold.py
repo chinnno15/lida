@@ -80,7 +80,7 @@ def plot(data: pl.DataFrame):
     plt.title('{goal.question}', wrap=True)
     return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as dictionary `cols`.
     ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations, ignore columns like 'url'.
-    Make sure to ALWAYS return 'url' column in final dataframe if it exists in list of columns.
+    MAKE SURE TO ALWAYS RETURN 'url' AFTER AGGREGATIONS IF POSSIBLE.
      Return plt first.
 
 chart = plot(data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""

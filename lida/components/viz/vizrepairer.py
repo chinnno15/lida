@@ -2,7 +2,7 @@ from typing import Dict, List, Union
 from llmx import TextGenerator, TextGenerationConfig, TextGenerationResponse
 
 from ..scaffold import ChartScaffold
-from lida.datamodel.__init__ import Summary
+from ...datamodel import Summary
 from lida.components.goal.goal import Goal
 
 system_prompt = """

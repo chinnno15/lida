@@ -1,8 +1,10 @@
-from lida.components import Manager
-from llmx import llm, TextGenerationConfig
-import alog
 
+from lida.components import Manager
 from lida.components.goal.goal import Goal
+from llmx import llm, TextGenerationConfig
+from pathlib import Path
+import alog
+import polars as pl
 
 lida = Manager(text_gen=llm("openai", model="gpt-4o"))
 
@@ -39,10 +41,17 @@ def test_goal_init():
         temperature=0.1,
         use_cache=True,
         max_tokens=None
+
     )
+    FILENAME = f'{Path.home()}/ecomm_data/sample.parquet'
+
+    data = pl.read_parquet(FILENAME)
+
+    if data.shape[0] > 20:
+        data = data.head(20)
 
     summary = lida.summarize(
-        cars_data_url,
+        FILENAME,
         textgen_config=textgen_config,
         summary_method="llm"
     )
@@ -50,8 +59,11 @@ def test_goal_init():
     textgen_config.use_cache = False
 
     goal = Goal(
+        data=data,
+        textgen_config=textgen_config,
+        summary=summary,
         question='top selling items',
     )
 
-    alog.info(alog.pformat(goal))
+    # alog.info(alog.pformat(goal))
 
