@@ -3,7 +3,7 @@ import alog
 from llmx import TextGenerationConfig, llm
 from pydantic.dataclasses import dataclass
 from lida.components.goal.instructions import SYSTEM_INSTRUCTIONS, FORMAT_INSTRUCTIONS
-from lida.datamodel import TextGenerator
+from lida.datamodel.text_generator import TextGenerator
 from lida.datamodel.persona import Persona
 
 

@@ -32,11 +32,6 @@ class UploadUrl:
 
 
 @dataclass
-class TextGenerator:
-    pass
-
-
-@dataclass
 class Summary:
     """A summary of a dataset"""
 
