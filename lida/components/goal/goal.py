@@ -90,7 +90,7 @@ class Goal:
                 f"who is insterested in complex, insightful goals about the data. \n "
                 f"The question should be derived from the question: '{self.question}'. If the question is simple, please try to elaborate the question as to the type of aggregation necessary. IF POSSIBLE AND THE QUERY IS NOT SPECIFIC TO A DIFFERENT "
                 f"TYPE OF AGGREGATION, ALWAYS AGGREGATE BY GROSS REVENUE.\n"
-                f"PLEASE ONLY GENERATE ONE GOAL. IN ADDITION TO THIS, TRY TO INCLUDE THE URL COLUMN IN YOUR ANSWER.")
+                f"PLEASE ONLY GENERATE ONE GOAL. IN ADDITION TO THIS, TRY TO INCLUDE THE URL AND Image URL COLUMN IN YOUR ANSWER.")
         messages = [
             {"role": "system", "content": SYSTEM_INSTRUCTIONS},
             {"role": "assistant",
