@@ -41,6 +41,7 @@ class ChartScaffold(object):
         f"*) ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations.\n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
         f"*) ALWAYS RETURN 'url' and 'image' COLUMNS. \n"
+        f"*) ALWAYS RETURN 'url' and 'image' COLUMNS. \n"
         f"*) AVOID RENDERING TOOLTIPS. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
@@ -81,7 +82,8 @@ def plot(data: pl.DataFrame):
     <stub> # only modify this section
     plt.title('{goal.question}', wrap=True)
     return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as dictionary `cols`.
-    ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations, ignore columns like 'url'.
+    ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations, ignore columns like 'url' from this columns dictionary.
+    ALWAYS RETURN 'url' and 'image' COLUMNS.
     ALWAYS RETURN 'url' and 'image' COLUMNS.
     AVOID RENDERING TOOLTIPS. 
      Return plt first.
