@@ -40,6 +40,8 @@ class ChartScaffold(object):
         f"*) When formatting strings be sure to do so after applying all transformations on a separate line. \n"
         f"*) ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations.\n"
         f"*) ALWAYS convert dataframe to pandas before creating the chart and after applying all transformations. \n"
+        f"*) ALWAYS RETURN 'url' and 'image' COLUMNS. \n"
+        f"*) AVOID RENDERING TOOLTIPS. \n"
         f"Solve the task  carefully by completing ONLY the <imports> AND <stub> section. Given the dataset summary, the plot(data) method should generate a {library} chart ({goal.visualization}) that addresses this goal: {goal.question}. DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.")
 
         matplotlib_instructions = f" {general_instructions} DO NOT include plt.show(). The plot method must return a matplotlib object (plt). Think step by step. \n"
@@ -80,7 +82,8 @@ def plot(data: pl.DataFrame):
     plt.title('{goal.question}', wrap=True)
     return plt, <stub>; # add any additional variables that need to be returned, with the intermediate dataframe as `df`, as well as dictionary `cols`.
     ALWAYS return dictionary named 'cols' with columns relevant to the query use a bool value to determine if they are price or price aggregations, ignore columns like 'url'.
-    MAKE SURE TO ALWAYS RETURN 'url' AFTER AGGREGATIONS IF POSSIBLE.
+    ALWAYS RETURN 'url' and 'image' COLUMNS.
+    AVOID RENDERING TOOLTIPS. 
      Return plt first.
 
 chart = plot(data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""
